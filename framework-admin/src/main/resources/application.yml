@@ -1,0 +1,51 @@
+server:
+  port: 80
+
+spring:
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: /templates
+  profiles:
+    active: dev
+  aop:
+    proxy-target-class: true
+  devtools:
+    restart:
+      enabled: false
+      additional-paths: src/main/java
+      exclude: static/**, /templates/**
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+
+mybatis-plus:
+  mapper-locations: classpath*:com/toskey/framework/modules/**/mapper/*.xml
+  type-aliases-package: com.toskey.framework.modules.*.model
+  global-config:
+    id-type: 3
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+
+beetl:
+  delimiter-statement-start: \@
+  delimiter-statement-end: null
+  resource-tagroot: common/tags
+  resource-tagsuffix: tag
+  resource-auto-check: true
+
+logging:
+  level.root: info
+  level.com.stylefeng: debug
+  path: logs/
+  file: logs.log
+
