@@ -5,4 +5,7 @@ package com.toskey.framework.common.constant;
  */
 public class Global {
 
+    public static final Integer NORMAL = 0;
+    public static final Integer DELETE = 1;
+
 }

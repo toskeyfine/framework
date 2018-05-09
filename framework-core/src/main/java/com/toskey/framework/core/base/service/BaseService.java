@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
  * 在mybatisplus提供的serviceImpl基础上增加公共方法
  * @param <M>
  * @param <T>
+ *
+ * @author toskey
  */
 public abstract class BaseService<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements IService<T> {
 

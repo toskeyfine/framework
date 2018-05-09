@@ -76,7 +76,7 @@ public class WebConf {
     @Bean
     public JdkRegexpMethodPointcut druidStatPointcut(){
         JdkRegexpMethodPointcut druidStatPointcut = new JdkRegexpMethodPointcut();
-        String patterns = "net.asiait.framework.modular.*.service.*";
+        String patterns = "com.toskey.framework.modules.*.service.*";
         //可以set多个
         druidStatPointcut.setPatterns(patterns);
         return druidStatPointcut;
