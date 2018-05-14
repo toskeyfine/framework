@@ -2,21 +2,23 @@ package com.toskey.framework.common.shiro;
 
 import com.google.common.collect.Lists;
 import com.toskey.framework.core.util.Encodes;
+import com.toskey.framework.modules.admin.dao.UserDao;
 import com.toskey.framework.modules.admin.model.Menu;
 import com.toskey.framework.modules.admin.model.Role;
 import com.toskey.framework.modules.admin.model.User;
 import com.toskey.framework.modules.admin.service.IUserService;
 import com.toskey.framework.modules.admin.util.LoginUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.security.Principal;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -24,9 +26,10 @@ import java.util.List;
  *
  * @author toskey
  */
+@Component
 public class ShiroRealm extends AuthorizingRealm {
     @Autowired
-    private IUserService userService;
+    private UserDao userDao;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -50,13 +53,20 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken shiroToken = (UsernamePasswordToken) authenticationToken;
         String userName = shiroToken.getUsername();
-        User user = userService.queryByUserName(userName);
+        User user = userDao.getByUserName(userName);
         if(null != user) {
             byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
             return new SimpleAuthenticationInfo(user.getLoginName(),
                     user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
         }
         return null;
+    }
+
+    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+        HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
+        shaCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
+        shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
+        super.setCredentialsMatcher(shaCredentialsMatcher);
     }
 
 

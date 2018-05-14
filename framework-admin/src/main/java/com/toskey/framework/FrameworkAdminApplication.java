@@ -9,4 +9,5 @@ public class FrameworkAdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(FrameworkAdminApplication.class, args);
     }
+
 }

@@ -2,6 +2,8 @@ package com.toskey.framework.core.exception;
 
 public enum BusinessExceptionEnum {
 
+    KAPTCHA_ERROR(100, "验证码已失效"),
+
     /**
      * 其他
      */

@@ -1,0 +1,95 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 9999
+  servlet:
+    context-path: /framework
+
+#-----------------系统配置---------------------#
+toskey:
+  redis:
+    open: false
+  shiro:
+    redis: false
+
+spring:
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+  profiles:
+    active: dev
+  aop:
+    proxy-target-class: true
+  resources:
+    chain:
+      gzipped: true
+      cache: true
+      strategy:
+        content:
+          enabled: true
+          paths: /**
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    druid:
+      first:
+        url: jdbc:mysql://45.77.129.105:3306/m_framework?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+        username: root
+        password: lishuo123
+      second:
+        url: jdbc:mysql://45.77.129.105:3306/m_framework?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+        username: root
+        password: lishuo123
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+
+mybatis-plus:
+  mapper-locations: classpath*:com/toskey/framework/modules/**/mapper/**Mapper.xml
+  typeAliasesPackage: com.toskey.framework.modules.*.model
+  global-config:
+    #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #自动刷新mapper
+    refresh-mapper: true
+    #逻辑删除配置
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    #自定义SQL注入器
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+
+logging:
+  level.root: info
+  level.com.stylefeng: debug
+  path: logs/
+  file: logs.log

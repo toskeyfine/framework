@@ -22,7 +22,7 @@ public class LoginController extends BaseController {
         if(curUser != null) {
             return "index";
         }
-        return "login";
+        return "templates/login";
     }
 
     @GetMapping("login")
@@ -30,7 +30,7 @@ public class LoginController extends BaseController {
         if(ShiroUtils.getSubject() != null && ShiroUtils.getSubject().isAuthenticated()) {
             return REDIRECT + "index";
         }
-        return "login";
+        return "templates/login";
     }
 
     @PostMapping("login")
@@ -41,11 +41,11 @@ public class LoginController extends BaseController {
         User curUser = ShiroUtils.getCurUser();
         if(curUser == null) {
             model.addAttribute("errMsg", "用户名或密码错误");
-            return "login";
+            return "templates/login";
         }
         HttpUtils.getSession().setAttribute("userSession", curUser);
         ShiroUtils.getSession().setAttribute("sessionFlag", true);
-        return "index";
+        return "templates/index";
     }
 
     @RequestMapping("logout")

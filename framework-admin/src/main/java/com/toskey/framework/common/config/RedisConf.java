@@ -1,51 +1,59 @@
 package com.toskey.framework.common.config;
 
-import com.toskey.framework.core.util.FastJsonRedisSerializer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 /**
- * Redis配置
+ * Redis配置类
+ *
  * @author toskey
  */
 @Configuration
-@ConditionalOnClass(RedisOperations.class)
-@EnableConfigurationProperties(RedisProperties.class)
 public class RedisConf {
 
-    @Bean
-    @ConditionalOnMissingBean(name="redisTemplate")
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<Object, Object> template = new RedisTemplate<>();
-        //使用fastjson序列化
-        FastJsonRedisSerializer fastJsonRedisSerializer = new FastJsonRedisSerializer(Object.class);
-        // value值的序列化采用fastJsonRedisSerializer
-        template.setValueSerializer(fastJsonRedisSerializer);
-        template.setHashValueSerializer(fastJsonRedisSerializer);
-        // key的序列化采用StringRedisSerializer
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
+    @Autowired
+    private RedisConnectionFactory factory;
 
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setConnectionFactory(factory);
+        return redisTemplate;
     }
 
     @Bean
-    @ConditionalOnMissingBean(StringRedisTemplate.class)
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(redisConnectionFactory);
-        return template;
+    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForHash();
+    }
+
+    @Bean
+    public ValueOperations<String, String> valueOperations(RedisTemplate<String, String> redisTemplate) {
+        return redisTemplate.opsForValue();
+    }
+
+    @Bean
+    public ListOperations<String, Object> listOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForList();
+    }
+
+    @Bean
+    public SetOperations<String, Object> setOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForSet();
+    }
+
+    @Bean
+    public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForZSet();
     }
 
 }
