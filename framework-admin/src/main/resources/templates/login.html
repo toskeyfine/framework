@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" th:href="@{bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{modules/login/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{modules/login/css/form-elements.css}">
+    <link rel="stylesheet" th:href="@{modules/login/css/style.css}">
+    <script th:src="@{modules/login/js/jquery-1.11.1.min.js}"></script>
+    <script th:src="@{bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{modules/login/js/jquery.backstretch.min.js}"></script>
+    <script th:src="@{modules/login/js/retina-1.1.0.min.js}"></script>
+    <script th:src="@{modules/login/js/scripts.js}" th:inline="javascript"></script>
+</head>
+<body>
+
+
+<!-- Top content -->
+<div class="top-content">
+
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 book">
+                    <img th:src="@{modules/login/img/ebook.png}" alt="">
+                </div>
+                <div class="col-sm-5 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>Get our eBook</h3>
+                            <p>Fill in the form below to get instant access:</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-pencil"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                        <form role="form" th:action="@{login}" method="post" class="registration-form">
+                            <div class="form-group">
+                                <label class="sr-only" for="form-first-name">First name</label>
+                                <input type="text" name="loginName" placeholder="用户名" class="form-control" id="form-first-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="form-last-name">Last name</label>
+                                <input type="password" name="password" placeholder="密码" class="form-control" id="form-last-name">
+                            </div>
+                            <button type="submit" class="btn">登录</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

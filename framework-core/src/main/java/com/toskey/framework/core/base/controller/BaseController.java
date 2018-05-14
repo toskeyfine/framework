@@ -21,8 +21,11 @@ import java.io.UnsupportedEncodingException;
  */
 public class BaseController {
 
-    protected static String SUCCESS = "SUCCESS";
-    protected static String ERROR = "ERROR";
+    protected static final String SUCCESS = "SUCCESS";
+    protected static final String ERROR = "ERROR";
+
+    protected static final String REDIRECT = "redirect:";
+    protected static final String FORWARD = "forward:";
 
     /**
      * 返回前台文件流

@@ -1,15 +1,13 @@
 package com.toskey.framework.common.shiro;
 
 import com.google.common.collect.Lists;
+import com.toskey.framework.core.util.Encodes;
 import com.toskey.framework.modules.admin.model.Menu;
 import com.toskey.framework.modules.admin.model.Role;
 import com.toskey.framework.modules.admin.model.User;
 import com.toskey.framework.modules.admin.service.IUserService;
 import com.toskey.framework.modules.admin.util.LoginUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -18,6 +16,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = (User) principalCollection.fromRealm(this.getClass().getName()).iterator().next();
         List<String> permission = Lists.newArrayList();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        List<Role> roleList = user.getRoleList();
+        List<Role> roleList = LoginUtils.queryRoleByUser(user.getId());
         if(roleList.size() > 0) {
             for(Role role : roleList) {
                 List<Menu> menuList = LoginUtils.queryMenuByRole(role.getId());
@@ -49,11 +48,16 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        ShiroToken shiroToken = (ShiroToken) authenticationToken;
+        UsernamePasswordToken shiroToken = (UsernamePasswordToken) authenticationToken;
         String userName = shiroToken.getUsername();
         User user = userService.queryByUserName(userName);
-        ByteSource credSalt = new Md5Hash(user.getSalt());
-        return new SimpleAuthenticationInfo(user, user.getPassword(), credSalt, this.getClass().getName());
+        if(null != user) {
+            byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
+            return new SimpleAuthenticationInfo(user.getLoginName(),
+                    user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+        }
+        return null;
     }
+
 
 }
