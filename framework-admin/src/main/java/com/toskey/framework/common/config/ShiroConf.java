@@ -17,54 +17,52 @@ import org.springframework.context.annotation.Configuration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Shiro配置类
+ *
+ * @author toskey
+ */
 @Configuration
 public class ShiroConf {
 
     @Bean("sessionManager")
-    public SessionManager sessionManager(RedisShiroSessionDAO redisShiroSessionDAO,
-                                         @Value("${toskey.redis.open}") boolean redisOpen,
-                                         @Value("${toskey.shiro.redis}") boolean shiroRedis){
+    public SessionManager sessionManager(){
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        //设置session过期时间为1小时(单位：毫秒)，默认为30分钟
-        sessionManager.setGlobalSessionTimeout(60 * 60 * 1000);
         sessionManager.setSessionValidationSchedulerEnabled(true);
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
-
-        if(redisOpen && shiroRedis){
-            sessionManager.setSessionDAO(redisShiroSessionDAO);
-        }
+        sessionManager.setSessionIdCookieEnabled(true);
         return sessionManager;
     }
 
     @Bean("securityManager")
-    public SecurityManager securityManager(ShiroRealm shiroRealm, SessionManager sessionManager) {
+    public SecurityManager securityManager(OAuth2Realm oAuth2Realm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(shiroRealm);
+        securityManager.setRealm(oAuth2Realm);
         securityManager.setSessionManager(sessionManager);
+
         return securityManager;
     }
 
-
     @Bean("shiroFilter")
-    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+    public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
-        shiroFilter.setLoginUrl("/login.html");
-        shiroFilter.setUnauthorizedUrl("/");
+
+        //oauth过滤
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put("oauth2", new OAuth2Filter());
+        shiroFilter.setFilters(filters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/webjars/**", "anon");
+        filterMap.put("/druid/**", "anon");
+        filterMap.put("/app/**", "anon");
+        filterMap.put("/sys/login", "anon");
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-ui.html", "anon");
-        filterMap.put("/webjars/**", "anon");
         filterMap.put("/swagger-resources/**", "anon");
-
-        filterMap.put("/statics/**", "anon");
-        filterMap.put("/login.html", "anon");
-        filterMap.put("/sys/login", "anon");
-        filterMap.put("/favicon.ico", "anon");
         filterMap.put("/captcha.jpg", "anon");
-        filterMap.put("/**", "authc");
+        filterMap.put("/**", "oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

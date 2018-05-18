@@ -6,6 +6,7 @@ import com.toskey.framework.modules.admin.dao.UserDao;
 import com.toskey.framework.modules.admin.model.Menu;
 import com.toskey.framework.modules.admin.model.Role;
 import com.toskey.framework.modules.admin.model.User;
+import com.toskey.framework.modules.admin.model.UserToken;
 import com.toskey.framework.modules.admin.service.IUserService;
 import com.toskey.framework.modules.admin.util.LoginUtils;
 import org.apache.shiro.authc.*;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 系统权限安全认证
@@ -28,13 +30,21 @@ import java.util.List;
  */
 @Component
 public class ShiroRealm extends AuthorizingRealm {
-    @Autowired
-    private UserDao userDao;
+
+
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        User user = (User) principalCollection.fromRealm(this.getClass().getName()).iterator().next();
-        List<String> permission = Lists.newArrayList();
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof ShiroUserToken;
+    }
+
+    /**
+     * 授权(验证权限时调用)
+     */
+    @Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+        User user = (User)principals.getPrimaryPrincipal();
+        String userId = user.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         List<Role> roleList = LoginUtils.queryRoleByUser(user.getId());
         if(roleList.size() > 0) {
@@ -49,25 +59,23 @@ public class ShiroRealm extends AuthorizingRealm {
         return info;
     }
 
+    /**
+     * 认证(登录时调用)
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        UsernamePasswordToken shiroToken = (UsernamePasswordToken) authenticationToken;
-        String userName = shiroToken.getUsername();
-        User user = userDao.getByUserName(userName);
-        if(null != user) {
-            byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-            return new SimpleAuthenticationInfo(user.getLoginName(),
-                    user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+        String accessToken = (String) authenticationToken.getPrincipal();
+
+        //根据accessToken，查询用户信息
+        UserToken token = LoginUtils.queryByUserToken(accessToken);
+        //token失效
+        if(token == null || token.getExpireTime().getTime() < System.currentTimeMillis()){
+            throw new IncorrectCredentialsException("token失效，请重新登录");
         }
-        return null;
+        //查询用户信息
+        User user = LoginUtils.queryById(token.getUserId());
+
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, token, getName());
+        return info;
     }
-
-    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-        HashedCredentialsMatcher shaCredentialsMatcher = new HashedCredentialsMatcher();
-        shaCredentialsMatcher.setHashAlgorithmName(ShiroUtils.hashAlgorithmName);
-        shaCredentialsMatcher.setHashIterations(ShiroUtils.hashIterations);
-        super.setCredentialsMatcher(shaCredentialsMatcher);
-    }
-
-
 }

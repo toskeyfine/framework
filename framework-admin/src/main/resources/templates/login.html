@@ -3,15 +3,15 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/modules/login/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="static/modules/login/css/form-elements.css">
-    <link rel="stylesheet" href="static/modules/login/css/style.css">
-    <script src="static/modules/login/js/jquery-1.11.1.min.js"></script>
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <script src="static/modules/login/js/jquery.backstretch.min.js"></script>
-    <script src="static/modules/login/js/retina-1.1.0.min.js"></script>
-    <script src="static/modules/login/js/scripts.js"></script>
+    <link rel="stylesheet" href="${ctxPath}/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${ctxPath}/static/modules/login/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${ctxPath}/static/modules/login/css/form-elements.css">
+    <link rel="stylesheet" href="${ctxPath}/static/modules/login/css/style.css">
+    <script src="${ctxPath}/static/modules/login/js/jquery-1.11.1.min.js"></script>
+    <script src="${ctxPath}/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="${ctxPath}/static/modules/login/js/jquery.backstretch.min.js"></script>
+    <script src="${ctxPath}/static/modules/login/js/retina-1.1.0.min.js"></script>
+    <script src="${ctxPath}/static/modules/login/js/scripts.js"></script>
 </head>
 <body>
 
@@ -22,7 +22,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-6 book">
-                    <img src="static/modules/login/img/ebook.png}" alt="">
+                    <img src="${ctxPath}/static/modules/login/img/ebook.png}" alt="">
                 </div>
                 <div class="col-sm-5 form-box">
                     <div class="form-top">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="form-bottom">
-                        <form role="form" action="static/login" method="post" class="registration-form">
+                        <form action="${ctxPath}/loginT" method="post">
                             <div class="form-group">
                                 <label class="sr-only" for="form-first-name">First name</label>
                                 <input type="text" name="loginName" placeholder="用户名" class="form-control" id="form-first-name">
@@ -44,7 +44,7 @@
                                 <label class="sr-only" for="form-last-name">Last name</label>
                                 <input type="password" name="password" placeholder="密码" class="form-control" id="form-last-name">
                             </div>
-                            <button type="submit" class="btn">登录</button>
+                            <input type="submit" class="btn" value="登录">
                         </form>
                     </div>
                 </div>

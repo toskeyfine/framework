@@ -3,9 +3,7 @@
 <mapper namespace="com.toskey.framework.modules.admin.dao.UserDao">
 
     <select id="getByUserName" resultType="com.toskey.framework.modules.admin.model.User">
-        SELECT * FROM sys_user WHERE user_name = #{userName}
+        SELECT * FROM sys_user WHERE login_name = #{userName}
     </select>
-
-
 
 </mapper>

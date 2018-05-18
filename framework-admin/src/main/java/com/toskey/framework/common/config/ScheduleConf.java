@@ -14,8 +14,8 @@ import java.util.Properties;
  */
 // @Configuration
 public class ScheduleConf {
-    @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
+    //@Bean
+    /*public SchedulerFactoryBean schedulerFactoryBean(DataSource dataSource) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setDataSource(dataSource);
 
@@ -53,5 +53,5 @@ public class ScheduleConf {
         factory.setAutoStartup(true);
 
         return factory;
-    }
+    }*/
 }

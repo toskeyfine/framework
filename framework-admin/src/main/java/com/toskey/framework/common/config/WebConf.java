@@ -1,35 +1,20 @@
 package com.toskey.framework.common.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
-import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
-import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.google.code.kaptcha.util.Config;
-import com.toskey.framework.core.xss.XssFilter;
-import org.springframework.aop.Advisor;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.JdkRegexpMethodPointcut;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 @Configuration
 public class WebConf implements WebMvcConfigurer {
@@ -37,6 +22,7 @@ public class WebConf implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/statics/**").addResourceLocations("classpath:/statics/");
+        registry.addResourceHandler("/templates/**").addResourceLocations("/resources/templates/");
     }
 
     @Override

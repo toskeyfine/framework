@@ -1,11 +1,5 @@
 server:
-  tomcat:
-    uri-encoding: UTF-8
-    max-threads: 1000
-    min-spare-threads: 30
   port: 9999
-  servlet:
-    context-path: /framework
 
 #-----------------系统配置---------------------#
 toskey:
@@ -20,6 +14,11 @@ spring:
       preferred-json-mapper: fastjson
   profiles:
     active: dev
+  mvc:
+      static-path-pattern: /static/**
+      view:
+        prefix: /templates
+        suffix: .html
   aop:
     proxy-target-class: true
   resources:
@@ -65,6 +64,13 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+
+beetl:
+  delimiter-statement-start: \@   #开始结束标签(yaml不允许@开头)
+  delimiter-statement-end: null
+  resource-tagroot: common/tags   #自定义标签文件Root目录和后缀
+  resource-tagsuffix: tag
+  resource-auto-check: true #是否检测文件变化,开发用true合适，但线上要改为false
 
 mybatis-plus:
   mapper-locations: classpath*:com/toskey/framework/modules/**/mapper/**Mapper.xml
