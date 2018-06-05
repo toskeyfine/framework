@@ -15,6 +15,11 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
+/**
+ * 数据源切换AOP
+ *
+ * @author toskey
+ */
 @Aspect
 @Component
 public class DataSourceAop implements Ordered {

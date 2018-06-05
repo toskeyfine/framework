@@ -1,5 +1,6 @@
 package com.toskey.framework.common.base;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.toskey.framework.core.base.entity.BaseEntity;
 import com.toskey.framework.core.constant.Global;
 import com.toskey.framework.modules.admin.model.User;
@@ -11,8 +12,10 @@ public class DataEntity<T> extends BaseEntity {
     private Integer sort;
     private Integer delFlag;
     private User createBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     private User updateBy;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     private String remarks;
 
