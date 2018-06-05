@@ -12,15 +12,11 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Druid多数据源配置类
- *
- * @author toskey
- */
 @Configuration
 public class DataSourceConf {
 
     @Bean
+    @Primary
     @ConfigurationProperties("spring.datasource.druid.first")
     public DataSource firstDataSource(){
         return DruidDataSourceBuilder.create().build();
@@ -33,7 +29,6 @@ public class DataSourceConf {
     }
 
     @Bean
-    @Primary
     public DynamicDataSource dataSource(DataSource firstDataSource, DataSource secondDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceNames.FIRST, firstDataSource);

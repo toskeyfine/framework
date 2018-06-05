@@ -24,7 +24,7 @@ public class ShiroUtils {
     }
 
     public static User getUser() {
-        return (User)SecurityUtils.getSubject().getPrincipal();
+        return (User)SecurityUtils.getSubject().getPrincipals().getPrimaryPrincipal();
     }
 
     public static String getUserId() {

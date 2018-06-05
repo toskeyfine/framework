@@ -1,6 +1,5 @@
 package com.toskey.framework.common.config;
 
-import com.toskey.framework.common.shiro.RedisShiroSessionDAO;
 import com.toskey.framework.common.shiro.ShiroRealm;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -10,7 +9,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,9 +32,9 @@ public class ShiroConf {
     }
 
     @Bean("securityManager")
-    public SecurityManager securityManager(OAuth2Realm oAuth2Realm, SessionManager sessionManager) {
+    public SecurityManager securityManager(ShiroRealm shiroRealm, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(oAuth2Realm);
+        securityManager.setRealm(shiroRealm);
         securityManager.setSessionManager(sessionManager);
 
         return securityManager;
@@ -47,22 +45,20 @@ public class ShiroConf {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
 
-        //oauth过滤
-        Map<String, Filter> filters = new HashMap<>();
-        filters.put("oauth2", new OAuth2Filter());
-        shiroFilter.setFilters(filters);
-
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterMap.put("/webjars/**", "anon");
+        filterMap.put("/lib/**", "anon");
         filterMap.put("/druid/**", "anon");
-        filterMap.put("/app/**", "anon");
-        filterMap.put("/sys/login", "anon");
+        filterMap.put("/loginValid", "anon");
+        filterMap.put("/login", "anon");
+        filterMap.put("/index", "anon");
+        filterMap.put("/logout", "anon");
         filterMap.put("/swagger/**", "anon");
         filterMap.put("/v2/api-docs", "anon");
         filterMap.put("/swagger-ui.html", "anon");
         filterMap.put("/swagger-resources/**", "anon");
-        filterMap.put("/captcha.jpg", "anon");
-        filterMap.put("/**", "oauth2");
+        filterMap.put("/captcha", "anon");
+        filterMap.put("/**", "user");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

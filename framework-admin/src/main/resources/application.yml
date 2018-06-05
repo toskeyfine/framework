@@ -1,77 +1,66 @@
+#----------------服务器配置--------------------#
 server:
   port: 9999
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  connection-timeout: 5000ms
+  servlet:
+    context-path: /
 
-#-----------------系统配置---------------------#
+#-----------------个性化配置---------------------#
 toskey:
   redis:
     open: false
   shiro:
     redis: false
 
+#-----------------系统配置---------------------#
 spring:
-  http:
-    converters:
-      preferred-json-mapper: fastjson
   profiles:
     active: dev
-  mvc:
-      static-path-pattern: /static/**
-      view:
-        prefix: /templates
-        suffix: .html
-  aop:
-    proxy-target-class: true
-  resources:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  http:
+    multipart:
+      servlet:
+        max-file-size: 100MB
+        max-request-size: 100MB
+        enabled: true
+  redis:
+    open: false
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    timeout: 6000ms
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 10
+        min-idle: 5
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
+  reources:
     chain:
-      gzipped: true
-      cache: true
       strategy:
         content:
           enabled: true
           paths: /**
-  # 数据源配置
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.jdbc.Driver
-    druid:
-      first:
-        url: jdbc:mysql://45.77.129.105:3306/m_framework?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-        username: root
-        password: lishuo123
-      second:
-        url: jdbc:mysql://45.77.129.105:3306/m_framework?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-        username: root
-        password: lishuo123
-      initial-size: 10
-      max-active: 100
-      min-idle: 10
-      max-wait: 60000
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 20
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      stat-view-servlet:
-        enabled: true
-        url-pattern: /druid/*
-      filter:
-        stat:
-          log-slow-sql: true
-          slow-sql-millis: 1000
-          merge-sql: false
-        wall:
-          config:
-            multi-statement-allow: true
+    add-mappings: false
 
-beetl:
-  delimiter-statement-start: \@   #开始结束标签(yaml不允许@开头)
-  delimiter-statement-end: null
-  resource-tagroot: common/tags   #自定义标签文件Root目录和后缀
-  resource-tagsuffix: tag
-  resource-auto-check: true #是否检测文件变化,开发用true合适，但线上要改为false
 
+
+#----------------MybatisPlus配置--------------------#
 mybatis-plus:
   mapper-locations: classpath*:com/toskey/framework/modules/**/mapper/**Mapper.xml
   typeAliasesPackage: com.toskey.framework.modules.*.model
@@ -93,9 +82,3 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     call-setters-on-nulls: true
-
-logging:
-  level.root: info
-  level.com.stylefeng: debug
-  path: logs/
-  file: logs.log

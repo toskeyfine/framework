@@ -47,6 +47,10 @@ public class User extends DataEntity<User> {
      */
     private String type;
     /**
+     * 用户状态
+     */
+    private String status;
+    /**
      * 头像
      */
     private String photo;
@@ -163,5 +167,13 @@ public class User extends DataEntity<User> {
 
     public void setRoleId(String roleId) {
         this.roleId = roleId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

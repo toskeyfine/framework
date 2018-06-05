@@ -1,7 +1,7 @@
 package com.toskey.framework.common.base;
 
-import com.toskey.framework.common.constant.Global;
 import com.toskey.framework.core.base.entity.BaseEntity;
+import com.toskey.framework.core.constant.Global;
 import com.toskey.framework.modules.admin.model.User;
 
 import java.util.Date;
