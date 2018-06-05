@@ -3,7 +3,7 @@ package com.toskey.framework.core.util;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import reactor.core.Exceptions;
 
 import java.io.UnsupportedEncodingException;
@@ -91,21 +91,21 @@ public class Encodes {
      * Html 转码.
      */
     public static String escapeHtml(String html) {
-        return StringEscapeUtils.escapeHtml4(html);
+        return StringEscapeUtils.escapeHtml(html);
     }
 
     /**
      * Html 解码.
      */
     public static String unescapeHtml(String htmlEscaped) {
-        return StringEscapeUtils.unescapeHtml4(htmlEscaped);
+        return StringEscapeUtils.unescapeHtml(htmlEscaped);
     }
 
     /**
      * Xml 转码.
      */
     public static String escapeXml(String xml) {
-        return StringEscapeUtils.escapeXml10(xml);
+        return StringEscapeUtils.escapeXml(xml);
     }
 
     /**

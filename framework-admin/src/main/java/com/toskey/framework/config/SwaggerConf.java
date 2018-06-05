@@ -1,4 +1,4 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

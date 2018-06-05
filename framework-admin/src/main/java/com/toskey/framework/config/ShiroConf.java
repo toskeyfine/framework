@@ -1,4 +1,4 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import com.toskey.framework.common.shiro.ShiroRealm;
 import org.apache.shiro.session.mgt.SessionManager;

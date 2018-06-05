@@ -1,4 +1,4 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

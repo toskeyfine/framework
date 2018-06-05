@@ -1,4 +1,4 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.toskey.framework.common.interceptor.DataScopeInterceptor;

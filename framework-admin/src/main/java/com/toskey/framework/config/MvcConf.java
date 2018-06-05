@@ -1,20 +1,30 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import com.toskey.framework.core.xss.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import javax.servlet.DispatcherType;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * 拦截器配置类
- *
- * @author toskey
- */
 @Configuration
-public class FilterConf {
+public class MvcConf {
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        List<MediaType> list = new ArrayList<MediaType>();
+        list.add(MediaType.APPLICATION_JSON_UTF8);
+        list.add(MediaType.TEXT_HTML);
+        list.add(MediaType.APPLICATION_FORM_URLENCODED);
+        mappingJackson2HttpMessageConverter.setSupportedMediaTypes(list);
+        return mappingJackson2HttpMessageConverter;
+    }
 
     @Bean
     public FilterRegistrationBean shiroFilterRegistration() {

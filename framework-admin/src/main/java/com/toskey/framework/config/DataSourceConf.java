@@ -1,4 +1,4 @@
-package com.toskey.framework.common.config;
+package com.toskey.framework.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.toskey.framework.common.datasource.DataSourceNames;
