@@ -6,4 +6,8 @@
         SELECT * FROM sys_user WHERE login_name = #{userName}
     </select>
 
+    <select id="getChildUserByTopUser" resultType="string">
+        SELECT * FROM sys_user WHERE parent_id = #{userId}
+    </select>
+
 </mapper>
