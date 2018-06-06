@@ -2,24 +2,23 @@ package com.toskey.framework.core.annotation;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.METHOD)
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Documented
+@Target({ ElementType.METHOD })
 public @interface DataScope {
 
-    /**  表的别名 */
-    String tableAlias() default "";
+    /**
+     * 拦截类型 dept：按部门 user：按下级用户
+     * 默认为dept
+     * @return
+     */
+    String value() default "dept";
 
-    /**  true：没有本部门数据权限，也能查询本人数据 */
-    boolean user() default true;
-
-    /**  true：拥有子部门数据权限 */
-    boolean subDept() default false;
-
-    /**  部门ID */
-    String deptId() default "dept_id";
-
-    /**  用户ID */
-    String userId() default "user_id";
+    /**
+     * 是否递归应用下级用户的权限
+     * 当拦截类型为user时使用，默认为false
+     * @return
+     */
+    boolean subUserRole() default false;
 
 }
